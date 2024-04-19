@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Products</title>
+</head>
+<body>
+    <form method="get">
+        <input type="text" name="query" placeholder="Search Products">
+        <button type="submit">Search</button>
+    </form>
+    {% if query %}
+        <ul>
+        {% for products in nameProduct %}
+            <li>{{ products.nameProduct }} <p>${{ products.priceProduct }}</p></li>
+            <a href="{% url 'productUpdate' pk=products.pk %}">Update</a>
+            <form action="{% url 'productDelete' pk=products.pk %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" onclick="return confirm('Are you sure you want to delete this product?')">Delete</button>
+            </form>
+        {% empty %}
+            <li>Do not found results</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
