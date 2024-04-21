@@ -50,11 +50,11 @@ class ProductUpdate(UpdateView):
     model = Products
     form_class = ProductForm
     template_name = 'updateProducts.html'
-    success_url = reverse_lazy('search_products')
+    success_url = reverse_lazy('products_table')
 
 class ProductoDelete(DeleteView):
     model = Products
-    success_url = reverse_lazy('search_products')
+    success_url = reverse_lazy('products_table')
     
 def register_form(request):
     return render(request, 'register.html')
@@ -64,3 +64,12 @@ def login_form(request):
 
 def registerProducts_form(request):
     return render(request, 'registerProducts.html')
+
+def products_table(request):
+    all_products = Products.objects.all()
+    query = request.GET.get('query')
+    if query:
+        nameProduct = Products.objects.filter(nameProduct__icontains=query)
+        return render(request, 'productsTable.html', {'all_products': all_products, 'nameProduct': nameProduct, 'query': query})
+    else:
+        return render(request, 'productsTable.html', {'all_products': all_products})
